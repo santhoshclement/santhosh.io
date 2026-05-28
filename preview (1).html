@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Santhosh Clement</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0a1628; --blue: #1a56db; --blue-light: #3b82f6;
+    --cyan: #06b6d4; --white: #f8fafc; --muted: #94a3b8;
+    --surface: #111f38; --border: rgba(255,255,255,0.07);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', sans-serif; background: var(--navy); color: var(--white); line-height: 1.6; overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 56px; background: rgba(10,22,40,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.08em; color: var(--cyan); text-transform: lowercase; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 100px 48px 64px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(26,86,219,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -100px; left: 30%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(6,182,212,0.07) 0%, transparent 70%); pointer-events: none; }
+  .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center; width: 100%; max-width: 1100px; }
+  .hero-right { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+
+  /* PROFILE PHOTO */
+  .profile-wrap {
+    position: relative; width: 220px; height: 220px; flex-shrink: 0;
+  }
+  .profile-wrap::before {
+    content: ''; position: absolute; inset: -3px; border-radius: 50%;
+    background: conic-gradient(var(--cyan), var(--blue), var(--cyan));
+    animation: spin 6s linear infinite;
+    z-index: 0;
+  }
+  .profile-wrap::after {
+    content: ''; position: absolute; inset: 3px; border-radius: 50%;
+    background: var(--navy); z-index: 1;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .profile-img {
+    position: absolute; inset: 6px; border-radius: 50%;
+    object-fit: cover; object-position: center top;
+    width: calc(100% - 12px); height: calc(100% - 12px);
+    z-index: 2;
+  }
+
+  /* STATS CARD */
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px; position: relative; width: 220px; }
+  .hero-stats::before { content: ''; position: absolute; top: -1px; left: 24px; right: 24px; height: 1px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--white); line-height: 1; }
+  .stat-num span { color: var(--cyan); }
+  .stat-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 3px; }
+
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.25); border-radius: 100px; padding: 6px 14px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse 2s infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+  .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(36px, 4.5vw, 60px); line-height: 1.1; font-weight: 400; margin-bottom: 8px; color: var(--cyan); }
+  .hero h1 span { color: var(--cyan); font-style: italic; }
+  .hero-title { font-size: 12px; font-weight: 500; color: var(--blue-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; font-family: 'DM Mono', monospace; }
+  .hero-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; max-width: 520px; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary { padding: 12px 24px; border-radius: 6px; background: var(--blue); color: #fff; font-size: 14px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.1s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-1px); }
+  .btn-ghost { padding: 12px 24px; border-radius: 6px; background: transparent; color: var(--white); font-size: 14px; font-weight: 500; border: 1px solid var(--border); cursor: pointer; text-decoration: none; transition: border-color 0.2s, background 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.04); }
+
+  /* SECTIONS */
+  section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--cyan); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 6vw, 40px); font-weight: 400; margin-bottom: 36px; line-height: 1.2; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color 0.2s, transform 0.2s; }
+  .skill-card:hover { border-color: rgba(26,86,219,0.4); transform: translateY(-2px); }
+  .skill-card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 12px; }
+  .ic-azure{background:rgba(26,86,219,0.15);} .ic-iam{background:rgba(6,182,212,0.12);} .ic-sec{background:rgba(245,158,11,0.12);} .ic-devops{background:rgba(16,185,129,0.12);} .ic-script{background:rgba(139,92,246,0.12);} .ic-platform{background:rgba(244,63,94,0.12);}
+  .skill-card h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-size: 10px; font-family: 'DM Mono', monospace; background: rgba(255,255,255,0.05); color: var(--muted); padding: 3px 8px; border-radius: 100px; border: 1px solid var(--border); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: linear-gradient(180deg, var(--cyan), var(--blue), transparent); }
+  .tl-item { position: relative; margin-bottom: 40px; }
+  .tl-dot { position: absolute; left: -30px; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--navy); border: 2px solid var(--cyan); }
+  .tl-item.current .tl-dot { background: var(--cyan); box-shadow: 0 0 10px rgba(6,182,212,0.5); }
+  .tl-meta { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--cyan); letter-spacing: 0.05em; margin-bottom: 3px; }
+  .tl-company { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+  .tl-role { font-size: 13px; color: var(--blue-light); margin-bottom: 10px; }
+  .tl-points { list-style: none; }
+  .tl-points li { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 5px; padding-left: 16px; position: relative; }
+  .tl-points li::before { content: '→'; position: absolute; left: 0; color: var(--cyan); font-size: 11px; }
+
+  /* CERTS */
+  .certs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .cert-card { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; transition: border-color 0.2s; }
+  .cert-card:hover { border-color: rgba(245,158,11,0.35); }
+  .cert-icon { width: 34px; height: 34px; border-radius: 8px; background: rgba(245,158,11,0.12); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .cert-name { font-size: 12px; font-weight: 500; line-height: 1.4; color: var(--white); }
+  .cert-issuer { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+  /* CONTACT */
+  .contact-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 24px; text-align: center; position: relative; overflow: hidden; }
+  .contact-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--blue), var(--cyan), var(--blue)); }
+  .contact-card h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 5vw, 36px); margin-bottom: 12px; }
+  .contact-card p { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  .contact-items { display: flex; flex-direction: column; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .contact-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--white); }
+  .contact-item .ci { font-size: 18px; }
+
+  footer { text-align: center; padding: 24px 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  .fade-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s ease forwards; }
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+  .delay-1{animation-delay:0.1s;} .delay-2{animation-delay:0.2s;} .delay-3{animation-delay:0.3s;} .delay-4{animation-delay:0.4s;}
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .hamburger { display: flex; }
+    .nav-links { display: none; flex-direction: column; gap: 0; position: fixed; top: 56px; left: 0; right: 0; background: rgba(10,22,40,0.98); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 8px 0; }
+    .nav-links.open { display: flex; }
+    .nav-links li { border-bottom: 1px solid var(--border); }
+    .nav-links a { display: block; padding: 14px 20px; font-size: 13px; }
+    .hero { padding: 88px 16px 56px; min-height: auto; }
+    .hero-grid { grid-template-columns: 1fr; gap: 0; }
+    .hero-right { flex-direction: row; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 32px; }
+    .profile-wrap { width: 140px; height: 140px; }
+    .hero-stats { width: auto; flex: 1; min-width: 180px; }
+    .hero h1 { font-size: 36px; }
+    .hero-desc { font-size: 14px; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-ghost { width: 100%; justify-content: center; padding: 14px 20px; }
+    section { padding: 56px 16px; }
+    .section-title { font-size: 28px; margin-bottom: 24px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .skill-card { padding: 16px; }
+    .skill-card h3 { font-size: 12px; }
+    .certs-grid { grid-template-columns: 1fr; gap: 10px; }
+    .cert-card { padding: 14px 16px; }
+    .timeline { padding-left: 20px; }
+    .tl-dot { left: -26px; }
+    .tl-company { font-size: 15px; }
+    .contact-card { padding: 32px 16px; border-radius: 14px; }
+  }
+  @media (max-width: 420px) {
+    .hero h1 { font-size: 30px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .hero-right { flex-direction: column; align-items: center; }
+    .profile-wrap { width: 120px; height: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">santhosh portfolio</div>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+    <li><a href="#experience" onclick="closeMenu()">Experience</a></li>
+    <li><a href="#certifications" onclick="closeMenu()">Certs</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero" id="about">
+  <div class="hero-grid">
+    <!-- Left: text -->
+    <div>
+      <div class="hero-tag fade-in">Available for Senior Roles · UAE</div>
+      <h1 class="fade-in delay-1">Santhosh <span>Clement</span></h1>
+      <div class="hero-title fade-in delay-2">Principal Architect · Azure · DevOps · IAM</div>
+      <p class="hero-desc fade-in delay-3">Results-driven security architect with 15+ years designing Zero Trust architectures, cloud-native infrastructure, and enterprise IAM at scale — across financial services, aviation, and manufacturing in the UAE and India.</p>
+      <div class="hero-actions fade-in delay-4">
+        <a href="#contact" class="btn-primary">↗ Get in Touch</a>
+        <a href="#experience" class="btn-ghost">View Experience</a>
+      </div>
+    </div>
+    <!-- Right: photo + stats -->
+    <div class="hero-right fade-in delay-2">
+      <div class="profile-wrap">
+        <img class="profile-img" src="profile.jpg" alt="Santhosh Clement" alt="Santhosh Clement" />
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">15<span>+</span></div><div class="stat-label">Years Exp.</div></div>
+        <div class="stat"><div class="stat-num">5<span>+</span></div><div class="stat-label">MS Certs</div></div>
+        <div class="stat"><div class="stat-num">2K<span>+</span></div><div class="stat-label">Servers</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Frameworks</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="skills">
+  <div class="section-label">Core Competencies</div>
+  <h2 class="section-title">Technical Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-card"><div class="skill-card-icon ic-azure">☁️</div><h3>Azure Cloud</h3><div class="skill-tags"><span class="tag">VNet & NSG</span><span class="tag">ExpressRoute</span><span class="tag">AKS</span><span class="tag">PaaS / IaaS</span><span class="tag">Azure Firewall</span><span class="tag">Private DNS</span></div></div>
+    <div class="skill-card"><div class="skill-card-icon ic-iam">🔐</div><h3>Identity & IAM</h3><div class="skill-tags"><span class="tag">Entra ID</span><span class="tag">Entra PIM</span><span class="tag">ADFS</span><span class="tag">Conditional Access</span><span class="tag">CyberArk PAM</span><span class="tag">SailPoint IGA</span></div></div>
+    <div class="skill-card"><div class="skill-card-icon ic-sec">🛡️</div><h3>Security</h3><div class="skill-tags"><span class="tag">Zero Trust</span><span class="tag">Purview</span><span class="tag">Intune MDM</span><span class="tag">CrowdStrike</span><span class="tag">PCI DSS</span><span class="tag">NIST</span></div></div>
+    <div class="skill-card"><div class="skill-card-icon ic-devops">⚙️</div><h3>DevOps & IaC</h3><div class="skill-tags"><span class="tag">Azure DevOps</span><span class="tag">Terraform</span><span class="tag">GitHub Actions</span><span class="tag">Docker</span><span class="tag">CI/CD</span></div></div>
+    <div class="skill-card"><div class="skill-card-icon ic-script">💻</div><h3>Scripting</h3><div class="skill-tags"><span class="tag">PowerShell</span><span class="tag">Graph API</span><span class="tag">Python</span><span class="tag">VBScript</span></div></div>
+    <div class="skill-card"><div class="skill-card-icon ic-platform">🖥️</div><h3>Platforms</h3><div class="skill-tags"><span class="tag">Windows Server</span><span class="tag">Active Directory</span><span class="tag">VMware</span><span class="tag">Hyper-V</span><span class="tag">Office 365</span></div></div>
+  </div>
+</section>
+
+<section id="experience" style="padding-top: 0;">
+  <div class="section-label">Career Timeline</div>
+  <h2 class="section-title">Professional Experience</h2>
+  <div class="timeline">
+    <div class="tl-item current">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Feb 2026 – Present</div>
+      <div class="tl-company">Wipro UAE (Deputed at Emirates) · Dubai</div>
+      <div class="tl-role">Principal Architect</div>
+      <ul class="tl-points">
+        <li>Architect and govern enterprise Azure cloud infrastructure across IaaS, PaaS, and security layers aligned with Azure Well-Architected Framework.</li>
+        <li>Design Entra ID solutions — IAM, Identity Protection, PIM, B2B, Cross-Tenant, SAML, OAuth 2.0 — for large-scale application portfolios.</li>
+        <li>Architect HRMS integrations across Oracle ERP, Zucchetti, and Dayforce with enterprise IDAM workflows.</li>
+        <li>Guide AI Foundry technical design and mentor engineering teams on DevOps and cloud-native delivery.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Apr 2024 – Jan 2026</div>
+      <div class="tl-company">Adecco (Deputed at Magnati) · Abu Dhabi</div>
+      <div class="tl-role">Infrastructure Architect</div>
+      <ul class="tl-points">
+        <li>Designed enterprise Azure infrastructure — PaaS/IaaS, AKS clusters, Backup & Recovery Vaults — with targeted cost optimization.</li>
+        <li>Implemented IaC using Terraform & ARM; automated deployments via Azure DevOps CI/CD pipelines.</li>
+        <li>Upgraded CyberArk PAM from v13 to v14.2 with zero production impact; deployed Microsoft Purview for data governance.</li>
+        <li>Enforced Zero Trust with Conditional Access, MFA, passwordless auth, and least-privilege.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Sep 2021 – Mar 2024</div>
+      <div class="tl-company">Accenture · Bangalore, India</div>
+      <div class="tl-role">Cloud Transformation Associate Manager</div>
+      <ul class="tl-points">
+        <li>Designed Azure AD / Entra ID architecture including RBAC, Conditional Access, PIM, and Custom Roles.</li>
+        <li>Authored HLD & LLD documentation for AD, Azure AD, PKI, and ADFS on Azure infrastructure.</li>
+        <li>Led cross-functional teams across security, networking, and application teams.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Oct 2020 – Sep 2021</div>
+      <div class="tl-company">HCL Technologies · Bangalore, India</div>
+      <div class="tl-role">Associate Consultant</div>
+      <ul class="tl-points">
+        <li>Led Domain Controller upgrades from Windows Server 2012 R2 to 2019 across ~300 domain controllers.</li>
+        <li>Integrated SailPoint IGA for automated user onboarding/offboarding workflows.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Jan 2014 – Sep 2019</div>
+      <div class="tl-company">IBM India · Bangalore</div>
+      <div class="tl-role">Subject Matter Expert</div>
+      <ul class="tl-points">
+        <li>Delivered 24/7 remote infrastructure support for 1,000+ Windows Server environments for US-based enterprise clients.</li>
+        <li>Built PowerShell automation for AD health checks, certificate expiry notifications, and O365 administration.</li>
+      </ul>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-meta">Sep 2019 – Oct 2020</div>
+      <div class="tl-company">Woodbridge Foam · Bangalore</div>
+      <div class="tl-role">Senior Systems Administrator</div>
+      <ul class="tl-points">
+        <li>Managed global Active Directory, Azure AD, ADFS, and Hyper-V across ~80 plants worldwide.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="certifications" style="padding-top: 0;">
+  <div class="section-label">Credentials</div>
+  <h2 class="section-title">Certifications</h2>
+  <div class="certs-grid">
+    <div class="cert-card"><div class="cert-icon">🏆</div><div><div class="cert-name">Azure Solutions Architect Expert</div><div class="cert-issuer">Microsoft Certified</div></div></div>
+    <div class="cert-card"><div class="cert-icon">☁️</div><div><div class="cert-name">Azure Administrator Associate</div><div class="cert-issuer">Microsoft Certified</div></div></div>
+    <div class="cert-card"><div class="cert-icon">🔐</div><div><div class="cert-name">Identity and Access Administrator Associate</div><div class="cert-issuer">Microsoft Certified</div></div></div>
+    <div class="cert-card"><div class="cert-icon">🖥️</div><div><div class="cert-name">Windows Server Fundamentals</div><div class="cert-issuer">Microsoft Certified</div></div></div>
+    <div class="cert-card"><div class="cert-icon">⚡</div><div><div class="cert-name">VMware Certified Professional 5 (VCP5)</div><div class="cert-issuer">VMware</div></div></div>
+    <div class="cert-card"><div class="cert-icon">🎓</div><div><div class="cert-name">Master of Computer Applications (MCA)</div><div class="cert-issuer">Bharathidasan University · 2009</div></div></div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top: 0;">
+  <div class="contact-card">
+    <div class="section-label" style="margin-bottom: 14px;">// Let's Connect</div>
+    <h2>Open to Senior Architecture Roles</h2>
+    <p>Principal Architect · Cloud Infrastructure · IAM · Zero Trust · UAE</p>
+    <div class="contact-items">
+      <div class="contact-item"><span class="ci">📧</span> santhoshclement@outlook.com</div>
+      <div class="contact-item"><span class="ci">📱</span> +971 56 466 8835</div>
+      <div class="contact-item"><span class="ci">📍</span> Abu Dhabi, UAE</div>
+    </div>
+    <a href="mailto:santhoshclement@outlook.com" class="btn-primary" style="display:inline-flex;">Send a Message ↗</a>
+  </div>
+</section>
+
+<footer>© 2026 Santhosh Clement · Principal Security Architect · UAE</footer>
+
+<script>
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('nav-links');
+  btn.addEventListener('click', () => { btn.classList.toggle('open'); menu.classList.toggle('open'); });
+  function closeMenu() { btn.classList.remove('open'); menu.classList.remove('open'); }
+</script>
+</body>
+</html>
